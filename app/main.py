@@ -1,7 +1,7 @@
 import os
 import requests
 import logging
-import app.ayo_tracker as ayo_tracker
+import app.ayo_nlu_protection as ayo_tracker
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
