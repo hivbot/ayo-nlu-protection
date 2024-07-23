@@ -54,9 +54,10 @@ async def protection_variables(variables_input: BaseInput):
 async def protection_interact(interact_input: ProtectionInput):
     try:
         user_id = interact_input.user_id
+        user_name = interact.user_name
         session = interact_input.session
-        request = interact_input.request
-        DMconfig = interact_input.DMconfig
+        request = interact_input.action
+        DMconfig = interact_input.config
 
         logger.info("Received scheduler get request:")
         logger.info("user_id: %s", user_id)
