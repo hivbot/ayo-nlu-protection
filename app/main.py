@@ -1,7 +1,7 @@
 import os
 import requests
 import logging
-import app.ayo_nlu_protection as ayo_tracker
+import app.ayo_nlu_protection as ayo_nlu_protection
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
@@ -11,7 +11,8 @@ from fastapi.responses import JSONResponse
 
 AYO_WHATSAPP_API = os.environ.get('AYO_WHATSAPP_API')
 PHONE_NUMBER_ID = os.environ.get('PHONE_NUMBER_ID')
-
+VF_DM_URL = os.environ.get('VF_DM_URL')
+VF_API_KEY = os.environ.get('VF_API_KEY')
 
 app = FastAPI()
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
@@ -20,76 +21,57 @@ logger = logging.getLogger(__name__)
 
 class BaseInput(BaseModel):
     user_id: str
+    user_name: str
 
 
+class ProtectionInput(BaseInput):
+    session: str
+    action: str
+    config: Optional[str] = None
 
-class TrackerInput(BaseInput):
-    topic_name: str
-    query_value: Optional[str] = None
-    time_point: Optional[str] = None
 
-
-@app.post("/v1")
-async def post_tracker(tracker_input: TrackerInput):
+@app.post("/variables")
+async def protection_variables(variables_input: BaseInput):
     try:
-        user_id = tracker_input.user_id
-        topic_name = tracker_input.topic_name
-        time_point = tracker_input.time_point
-        query_value = tracker_input.query_value
+        user_id = variables_input.user_id
+        user_name = variables_input.user_name
         
-        logger.info("Received scheduler post request:")
+        logger.info("Received post request:")
         logger.info("user_id: %s", user_id)
-        logger.info("intent_name: %s", topic_name)
-        #logger.info("query_value: %s", query_value)
-        logger.info("time_point: %s", time_point)
+        logger.info("user_name: %s", user_name)
 
+        response = ayo_nlu_protection.patch_user_variables(VF_DM_URL, user_id, user_name, VF_API_KEY)
+        return JSONResponse(content={"message": "Patch request successful"})
+        return JSONResponse(content={"message": response})
 
-        tracker_id = user_id
-        logger.info("scheduler_id: %s", tracker_id)
-
-        ayo_tracker.post_data(user_id, topic_name, query_value, time_point)
-              
-        return JSONResponse(content={"message": "Tracker post successful"})
 
     except Exception as e:
         logger.error("Error: %s", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
-@app.post("/v2")
-async def get_tracker_entry(get_input: BaseInput):
+
+@app.post("/interact")
+async def protection_interact(interact_input: ProtectionInput):
     try:
-        user_id = get_input.user_id
+        user_id = interact_input.user_id
+        session = interact_input.session
+        request = interact_input.request
+        DMconfig = interact_input.DMconfig
 
         logger.info("Received scheduler get request:")
         logger.info("user_id: %s", user_id)
-        
-        get_tracker_response = ayo_tracker.get_entry(user_id)
+        logger.info("session: %s", session)
+        logger.info("user_enquiry: %s", request)
+        logger.info("DMconfig: %s", DMconfig)
 
-        return JSONResponse(content={
-            "message": get_tracker_response[0], 
-            "nickname": get_tracker_response[1], 
-            "med_startdate": get_tracker_response[2],
-            "app_startdate": get_tracker_response[3]})
-    
+        response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
+        return JSONResponse(content={"message": "Post request successful"})
+        return JSONResponse(content={"message": response})
+
+
     except Exception as e:
         logger.error("Error: %s", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
-
-@app.delete("/v1")
-async def delete_tracker_entry(delete_input: BaseInput):
-    try:
-        user_id = delete_input.user_id
-
-        logger.info("Received scheduler delete request:")
-        logger.info("user_id: %s", user_id)
-
-        ayo_tracker.delete_data(user_id)
-
-        return JSONResponse(content={"message": "Tracker entry deleted successfully"})
-
-    except Exception as e:
-        logger.error("Error: %s", e)
-        raise HTTPException(status_code=500, detail="Internal Server Error")
 

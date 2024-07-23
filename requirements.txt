@@ -1,11 +1,7 @@
 fastapi
 uvicorn
 requests
-pydantic
-apscheduler
-pymongo
-arrow
-scheduler
-icalendar
-cryptography
-azure-cosmos
+presidio-analyzer
+presidio-anonymizer
+spacy
+en_core_web_md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.1/en_core_web_md-3.7.1-py3-none-any.whl
