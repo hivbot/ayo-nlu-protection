@@ -29,7 +29,7 @@ async def protection_variables(variables_input: BaseInput):
         user_id = variables_input.user_id
         user_name = variables_input.user_name
 
-        logger.info("Received post request:")
+        logger.info("Received post request at /variables:")
         logger.info("user_id: %s", user_id)
         logger.info("user_name: %s", user_name)
 
@@ -53,14 +53,15 @@ async def protection_interact(interact_input: ProtectionInput):
         request = interact_input.action
         DMconfig = interact_input.config
 
-        logger.info("Received post request:")
+        logger.info("Received post request at /interact:")
         logger.info("user_id: %s", user_id)
         logger.info("session: %s", session)
         logger.info("user_enquiry: %s", request)
         logger.info("DMconfig: %s", DMconfig)
 
-        response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
-        # response = ayo_nlu_protection.analyze_text(request)
+        # wieder auskommentieren sobald läuft
+        # response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
+        response = ayo_nlu_protection.analyze_text(request)
         logger.info("response: %s", response)
         # response = ayo_nlu_protection.anonymize_text(request,response)
         # logger.info("response: %s", response)
