@@ -19,7 +19,7 @@ class BaseInput(BaseModel):
 
 class ProtectionInput(BaseInput):
     session: str
-    action: str
+    action: Any
     config: Optional[Any] = None
 
 
