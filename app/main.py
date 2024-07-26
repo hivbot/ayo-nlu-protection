@@ -61,7 +61,7 @@ async def protection_interact(interact_input: ProtectionInput):
         logger.info("DMconfig: %s", DMconfig)
 
         # response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
-        response = ayo_nlu_protection.analyze_text(request)
+        response = ayo_nlu_protection.analyze_text(request['payload'])
         logger.info("response: %s", response)
         # response = ayo_nlu_protection.anonymize_text(request,response)
         # logger.info("response: %s", response)

@@ -68,7 +68,7 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
         "versionID": VF_VERSION_ID,
         "sessionID": session,
     },
-    user_enquiry = str(user_enquiry)
+    user_enquiry = str(user_enquiry['payload'])
     analyzed_text = analyze_text(user_enquiry)
     anonymized_text = anonymize_text(user_enquiry, analyzed_text)
     logger.info("anonymized_text: %s", anonymized_text)
