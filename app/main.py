@@ -4,7 +4,7 @@ import logging
 import app.ayo_nlu_protection as ayo_nlu_protection
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
@@ -20,7 +20,7 @@ class BaseInput(BaseModel):
 class ProtectionInput(BaseInput):
     session: str
     action: str
-    config: Optional[str] = None
+    config: Optional[Any] = None
 
 
 @app.post("/variables")
