@@ -38,7 +38,6 @@ async def protection_variables(variables_input: BaseInput):
         # return JSONResponse(content={"message": "Patch request successful"})
         # return JSONResponse(content={"message": response})
 
-
     except Exception as e:
         logger.error("Error: %s", e)
         raise HTTPException(status_code=500, detail="Internal Server Error")
@@ -60,15 +59,14 @@ async def protection_interact(interact_input: ProtectionInput):
         logger.info("user_enquiry: %s", request)
         logger.info("DMconfig: %s", DMconfig)
 
-        # response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
-        response = ayo_nlu_protection.analyze_text(request['payload'])
+        response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
+        #response = ayo_nlu_protection.analyze_text(request['payload'])
         logger.info("response: %s", response)
         # response = ayo_nlu_protection.anonymize_text(request,response)
         # logger.info("response: %s", response)
 
-        # return JSONResponse(content={"message": "Post request successful"})
-        # return JSONResponse(content={"message": response})
-
+        return JSONResponse(content={"message": "Post request successful"})
+        return JSONResponse(content={"message": response})
 
     except Exception as e:
         logger.error("Error: %s", e)

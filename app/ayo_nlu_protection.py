@@ -7,9 +7,6 @@ from spacy.lang.en.examples import sentences
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
-
-
-
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 
@@ -32,17 +29,21 @@ logger = logging.getLogger(__name__)
 analyzer = AnalyzerEngine()
 anonymizer = AnonymizerEngine()
 
+
 def analyze_text(text):
-    analyze_result = analyzer.analyze(text=text,
-                               entities=ENTITIES,
-                               language='en',
-                               score_threshold=0.5
-                               )
+    analyze_result = analyzer.analyze(
+        text=text,
+        entities=ENTITIES,
+        language='en',
+        score_threshold=0.5
+        )
     return analyze_result
 
+
 def anonymize_text(text, results):
-    anonymize_result = anonymizer.anonymize(text=text, analyzer_results=results,
-                                           operators={"DEFAULT": OperatorConfig("replace")})
+    anonymize_result = anonymizer.anonymize(
+        text=text, analyzer_results=results,
+        operators={"DEFAULT": OperatorConfig("replace")})
     return anonymize_result.text
 
 
@@ -57,10 +58,20 @@ def patch_user_variables(user_id, user_name):
         "user_name": user_name
     }
     response = requests.patch(url, headers=headers, data=json.dumps(data))
+    logger.info(f"response from VF/variables: {response}")
     return response
 
 
 def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
+    user_text = str(user_enquiry['payload'])
+    analyzed_text = analyze_text(user_text)
+    anonymized_text = anonymize_text(user_text, analyzed_text)
+    logger.info("anonymized_text: %s", anonymized_text)
+    action = {
+        "type": "text",
+        "payload": anonymized_text
+    }
+
     url = f"{VF_DM_URL}/state/user/{requests.utils.quote(user_id)}/interact",
     headers = {
         "Authorization": VF_API_KEY,
@@ -68,16 +79,12 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
         "versionID": VF_VERSION_ID,
         "sessionID": session,
     },
-    user_enquiry = str(user_enquiry['payload'])
-    analyzed_text = analyze_text(user_enquiry)
-    anonymized_text = anonymize_text(user_enquiry, analyzed_text)
-    logger.info("anonymized_text: %s", anonymized_text)
-
     data = {
-        "action": anonymized_text,
+        "action": action,
         "config": DMconfig,
     }
     response = requests.post(url, headers=headers, data=json.dumps(data))
+    logger.info(f"response from VF/interact: {response}")
     return response
 
 
