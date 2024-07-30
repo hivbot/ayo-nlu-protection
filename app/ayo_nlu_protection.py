@@ -71,14 +71,13 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
         "type": "text",
         "payload": anonymized_text
     }
-
-    url = f"{VF_DM_URL}/state/user/{requests.utils.quote(user_id)}/interact",
+    url = f"{VF_DM_URL}/state/user/{requests.utils.quote(user_id)}/interact"
     headers = {
         "Authorization": VF_API_KEY,
         "Content-Type": "application/json",
         "versionID": VF_VERSION_ID,
         "sessionID": session,
-    },
+    }
     data = {
         "action": action,
         "config": DMconfig,
