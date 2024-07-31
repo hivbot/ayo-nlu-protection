@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional, Any
 from fastapi.responses import JSONResponse
-from fastapi.responses import PlainTextResponse
+
 app = FastAPI()
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
 logger = logging.getLogger(__name__)
@@ -35,11 +35,7 @@ async def protection_variables(variables_input: BaseInput):
 
         response = ayo_nlu_protection.patch_user_variables(user_id, user_name)
         logger.info("response: %s", response)
-        # return JSONResponse(content={"message": "Patch request successful"})
-        # return JSONResponse(content={"message": response})
-        raw_response_text = response.text
-
-        return PlainTextResponse(content=raw_response_text, status_code=response.status_code)
+        return JSONResponse(content=response.json(), status_code=response.status_code)
 
     except Exception as e:
         logger.error("Error: %s", e)
@@ -63,12 +59,8 @@ async def protection_interact(interact_input: ProtectionInput):
         logger.info("DMconfig: %s", DMconfig)
 
         response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
-        #response = ayo_nlu_protection.analyze_text(request['payload'])
         logger.info("response: %s", response)
-        # response = ayo_nlu_protection.anonymize_text(request,response)
-        # logger.info("response: %s", response)
-        raw_response_text = response.text
-        return PlainTextResponse(content=raw_response_text, status_code=response.status_code)
+        return JSONResponse(content=response.json(), status_code=response.status_code)
 
     except Exception as e:
         logger.error("Error: %s", e)

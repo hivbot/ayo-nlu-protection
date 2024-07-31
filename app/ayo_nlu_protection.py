@@ -109,30 +109,7 @@ if __name__ == "__main__":
 #https://huggingface.co/spaces/presidio/presidio_demo
 #https://microsoft.github.io/presidio/getting_started/
 #https://microsoft.github.io/presidio/api-docs/api-docs.html#tag/Analyzer/paths/~1supportedentities/get
-
-
-# # Not included entities as for https://microsoft.github.io/presidio/supported_entities/: ["DATE_TIME"]
-# # How to set up new entity: https://microsoft.github.io/presidio/analyzer/adding_recognizers/
-#
-# # Set up the engine, loads the NLP module (spaCy model by default)
-# # and other PII recognizers
-# analyzer = AnalyzerEngine()
-#
-# # Call analyzer to get results
-# results = analyzer.analyze(text=enquiry,
-#                            entities=entities,
-#                            language='en',
-#                            score_threshold=0.5
-#                            )
-#
-# print("Results: ", results)
-#
-# #Analyzer results are passed to the AnonymizerEngine for anonymization
-# #find the different operators here: https://microsoft.github.io/presidio/anonymizer/adding_operators/
-#
-# anonymizer = AnonymizerEngine()
-#
-# anonymized_text = anonymizer.anonymize(text=enquiry, analyzer_results=results,
-#                                        operators={"DEFAULT": OperatorConfig("replace")})
-#
-# print("Anonymized text: ", anonymized_text)
+# Not included entities as for https://microsoft.github.io/presidio/supported_entities/: ["DATE_TIME"]
+# How to set up new entity: https://microsoft.github.io/presidio/analyzer/adding_recognizers/
+#Analyzer results are passed to the AnonymizerEngine for anonymization
+#find the different operators here: https://microsoft.github.io/presidio/anonymizer/adding_operators/
