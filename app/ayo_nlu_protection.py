@@ -67,8 +67,10 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
     analyzed_text = analyze_text(user_text)
     anonymized_text = anonymize_text(user_text, analyzed_text)
     logger.info("anonymized_text: %s", anonymized_text)
+    if anonymized_text == "<PERSON>":
+        anonymized_text = str(user_enquiry['payload'])
     action = {
-        "type": "text",
+        "type": str(user_enquiry['type']),
         "payload": anonymized_text
     }
     url = f"{VF_DM_URL}/state/user/{requests.utils.quote(user_id)}/interact"
