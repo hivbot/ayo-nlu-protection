@@ -23,6 +23,8 @@ ENTITIES = ["CREDIT_CARD", "CRYPTO",
             "PERSON", "PHONE_NUMBER",
             "MEDICAL_LICENSE", "URL"]
 
+ALLOW_LIST = ["Module_General_No"]
+
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
 logger = logging.getLogger(__name__)
 
@@ -64,9 +66,12 @@ def patch_user_variables(user_id, user_name):
 
 def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
     user_text = str(user_enquiry['payload'])
-    analyzed_text = analyze_text(user_text)
-    anonymized_text = anonymize_text(user_text, analyzed_text)
-    logger.info("anonymized_text: %s", anonymized_text)
+    if user_text not in ALLOW_LIST:
+        analyzed_text = analyze_text(user_text)
+        anonymized_text = anonymize_text(user_text, analyzed_text)
+        logger.info("anonymized_text: %s", anonymized_text)
+    else:
+        anonymized_text = user_text
     if anonymized_text == "<PERSON>":
         anonymized_text = str(user_enquiry['payload'])
     action = {
