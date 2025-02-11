@@ -72,9 +72,9 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
         logger.info("anonymized_text: %s", anonymized_text)
     else:
         anonymized_text = user_text
-    if anonymized_text == "<PERSON>":
-        anonymized_text = str(user_enquiry['payload'])
-        logger.info("anonymized_text <PERSON>: %s", anonymized_text)
+    # if anonymized_text == "<PERSON>":
+    #     anonymized_text = str(user_enquiry['payload'])
+    #     logger.info("anonymized_text <PERSON>: %s", anonymized_text)
     action = {
         "type": str(user_enquiry['type']),
         "payload": anonymized_text
