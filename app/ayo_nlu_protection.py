@@ -69,12 +69,8 @@ def post_user_enquiry(DMconfig, session, user_id, user_enquiry):
     if user_text not in ALLOW_LIST:
         analyzed_text = analyze_text(user_text)
         anonymized_text = anonymize_text(user_text, analyzed_text)
-        #logger.info("anonymized_text", anonymized_text)
     else:
         anonymized_text = user_text
-    if anonymized_text == "<PERSON>":
-        anonymized_text = str(user_enquiry['payload'])
-    #logger.info("anonymized_text after if clause: %s", anonymized_text)
     action = {
         "type": str(user_enquiry['type']),
         "payload": anonymized_text

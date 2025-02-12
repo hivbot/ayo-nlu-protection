@@ -31,7 +31,6 @@ async def protection_variables(variables_input: BaseInput):
 
         logger.info("Received post request at /variables:")
         logger.info("user_id: %s", user_id)
-        #logger.info("user_name: %s", user_name)
 
         response = ayo_nlu_protection.patch_user_variables(user_id, user_name)
         logger.info("response: %s", response)
@@ -53,10 +52,7 @@ async def protection_interact(interact_input: ProtectionInput):
 
         logger.info("Received post request at /interact:")
         logger.info("user_id: %s", user_id)
-        #logger.info("user_name: %s", user_name)
-        #logger.info("session: %s", session)
-        #logger.info("user_enquiry: %s", request)
-        #logger.info("DMconfig: %s", DMconfig)
+
 
         response = ayo_nlu_protection.post_user_enquiry(DMconfig, session, user_id, request)
         logger.info("response: %s", response)
