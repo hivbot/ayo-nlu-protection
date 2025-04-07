@@ -22,6 +22,9 @@ class ProtectionInput(BaseInput):
     action: Any
     config: Optional[Any] = None
 
+@app.get("/")
+def read_root():
+    return {"message": "Service is running"}
 
 @app.post("/variables")
 async def protection_variables(variables_input: BaseInput):

@@ -26,8 +26,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# workflows
-.github/workflows/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
